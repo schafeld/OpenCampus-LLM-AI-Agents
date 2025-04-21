@@ -2,9 +2,11 @@
 
 ** ALWAYS REPLACE API ACCESS KEYS! **
 
+```text
 < Enter your OpenAI API key here >
 
 "Bearer <Enter your Hugging Face Access Token here>"
+```
 
 ** ALWAYS REPLACE API ACCESS KEYS! **
 
