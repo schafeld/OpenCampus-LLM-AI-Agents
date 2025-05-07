@@ -1,0 +1,15 @@
+
+OpenCampus.sh is an innovative educational initiative based in Hamburg, Germany. 
+It offers a variety of open and accessible learning opportunities in tech, 
+digital skills, and modern professions. The platform provides MOOCs (Massive Open Online Courses), 
+workshops, and project-based learning experiences that are often free or low-cost.
+
+Key characteristics of OpenCampus.sh:
+1. Community-focused education model
+2. Collaboration with industry partners and universities
+3. Practical, hands-on learning experiences
+4. Focus on modern digital skills and technologies
+5. Based in Hamburg but with online course offerings
+
+OpenCampus.sh aims to democratize access to education and bridge the gap between academic 
+knowledge and practical industry requirements in the digital age.
