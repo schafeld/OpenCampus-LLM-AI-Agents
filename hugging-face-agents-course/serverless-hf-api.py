@@ -29,12 +29,14 @@ def generate_response(prompt):
         messages=messages,
         temperature=0.7,
         top_p=0.9,
+        max_tokens=1024,
+        stream=False,
     )
     return response.choices[0].message.content
 
 # Example usage
 if __name__ == "__main__":
-    prompt = "Write a one-sentence bedtime story about a unicorn."
+    prompt = "The capital of France is"
     response = generate_response(prompt)
     print("Response:", response)
 
