@@ -16,6 +16,14 @@ if not os.environ.get("HF_TOKEN"):
   # os.environ["HF_TOKEN"] = getpass.getpass("Enter API key for Hugging Face: ")
   raise EnvironmentError("HF_TOKEN not found in the .env file.")
 
+if not os.environ.get("OPEN_WEATHER_API_KEY"):
+  # os.environ["OPEN_WEATHER_API_KEY"] = getpass.getpass("Enter API key for OpenWeather: ")
+  raise EnvironmentError("OPEN_WEATHER_API_KEY not found in the .env file.")
+
+if not os.environ.get("OPENAI_API_KEY"):
+  # os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+  raise EnvironmentError("OPENAI_API_KEY not found in the .env file.")
+
 # Below is an example of a tool that does nothing. Amaze us with your creativity !
 @tool
 def my_custom_tool(arg1:str, arg2:int)-> str: #it's import to specify the return type
