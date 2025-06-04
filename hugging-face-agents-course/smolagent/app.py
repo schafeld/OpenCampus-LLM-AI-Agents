@@ -3,9 +3,18 @@ import datetime
 import requests
 import pytz
 import yaml
+import os
 from tools.final_answer import FinalAnswerTool
 
 from Gradio_UI import GradioUI
+
+from dotenv import load_dotenv
+
+load_dotenv(os.path.expanduser("~/Projekte/MOOC/OpenCampus/codespace/.env"))
+
+if not os.environ.get("HF_TOKEN"):
+  # os.environ["HF_TOKEN"] = getpass.getpass("Enter API key for Hugging Face: ")
+  raise EnvironmentError("HF_TOKEN not found in the .env file.")
 
 # Below is an example of a tool that does nothing. Amaze us with your creativity !
 @tool
