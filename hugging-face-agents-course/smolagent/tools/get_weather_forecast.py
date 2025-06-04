@@ -70,7 +70,7 @@ class GetWeatherForecastTool(Tool):
                 
                 forecast_info += f"📅 {day_name}:\n"
                 forecast_info += f"   Temperature: {min_temp:.1f}°C - {max_temp:.1f}°C\n"
-                forecast_info += f"   Condition: {most_common_condition.Title()}\n\n"
+                forecast_info += f"   Condition: {most_common_condition.title()}\n\n"
             
             return forecast_info.strip()
             
