@@ -21,7 +21,9 @@ client = InferenceClient("meta-llama/Llama-3.3-70B-Instruct")
 # if the outputs for next cells are wrong, the free model may be overloaded. You can also use this public endpoint that contains Llama-3.2-3B-Instruct
 # client = InferenceClient("https://jc26mwg228mkj8dw.us-east-1.aws.endpoints.huggingface.cloud")
 
-print("Client initialized successfully.")
+# print("Client initialized successfully. \n")
+
+location = "New York"  # Default location for weather information
 
 SYSTEM_PROMPT = """Answer the following questions as best you can. You have access to the following tools:
 
@@ -36,7 +38,7 @@ example use :
 
 {{
   "action": "get_weather",
-  "action_input": {"location": "New York"}
+  "action_input": {"location": " """ + "{{location}}" + """ }
 }}
 
 
@@ -59,6 +61,12 @@ Final Answer: the final answer to the original input question
 Now begin! Reminder to ALWAYS use the exact characters `Final Answer:` when you provide a definitive answer. """
 
 
+
+# Dummy function to simulate getting weather information
+def get_weather(location):
+    return f"The weather in {location} is sunny with low temperatures. \n"
+
+
 def generate_response(prompt):
     messages = [
        {"role": "system", "content": SYSTEM_PROMPT},
@@ -74,11 +82,10 @@ def generate_response(prompt):
     )
     return response.choices[0].message.content
 
-# Example usage
+# # Example usage
 if __name__ == "__main__":
-    prompt = "What is the weather in London?"
+    prompt = f"What is the weather in {location}? \n"
     print("Prompt:", prompt)
-    print("Generating response...")
+    print("Generating response... \n\n")
     response = generate_response(prompt)
     print("Response:", response)
-
