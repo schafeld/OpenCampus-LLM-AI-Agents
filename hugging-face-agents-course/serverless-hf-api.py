@@ -5,6 +5,8 @@
 # pip install huggingface_hub
 
 import os
+import json
+import re
 from huggingface_hub import InferenceClient
 
 from dotenv import load_dotenv
@@ -23,7 +25,7 @@ client = InferenceClient("meta-llama/Llama-3.3-70B-Instruct")
 
 # print("Client initialized successfully. \n")
 
-location = "New York"  # Default location for weather information
+location = "Rome"  # Default location for weather information
 
 SYSTEM_PROMPT = """Answer the following questions as best you can. You have access to the following tools:
 
@@ -61,31 +63,96 @@ Final Answer: the final answer to the original input question
 Now begin! Reminder to ALWAYS use the exact characters `Final Answer:` when you provide a definitive answer. """
 
 
-
 # Dummy function to simulate getting weather information
 def get_weather(location):
-    return f"The weather in {location} is sunny with low temperatures. \n"
+    return f"The weather in {location} is sunny with 22°C."
 
 
-def generate_response(prompt):
-    messages = [
-       {"role": "system", "content": SYSTEM_PROMPT},
-       {"role": "user", "content": prompt}
-    ]
-    response = client.chat_completion(
-        messages=messages,
-        temperature=0.7,
-        top_p=0.9,
-        max_tokens=1024,
-        stream=False,
-        stop=["Observation:"] # Prevents the model from hallucinating real-time weather information it cannot access
-    )
-    return response.choices[0].message.content
+def extract_action_from_response(response):
+    """Extract JSON action from the model response"""
+    # Look for JSON blocks in markdown
+    json_pattern = r'```(?:json)?\s*(\{.*?\})\s*```'
+    matches = re.findall(json_pattern, response, re.DOTALL)
+    
+    if matches:
+        try:
+            return json.loads(matches[0])
+        except json.JSONDecodeError:
+            pass
+    
+    # Fallback: look for JSON-like structure without markdown
+    json_pattern = r'\{[^}]*"action"[^}]*\}'
+    matches = re.findall(json_pattern, response, re.DOTALL)
+    
+    if matches:
+        try:
+            return json.loads(matches[0])
+        except json.JSONDecodeError:
+            pass
+    
+    return None
 
-# # Example usage
+
+def execute_action(action_json):
+    """Execute the requested action"""
+    if action_json["action"] == "get_weather":
+        location = action_json["action_input"]["location"]
+        return get_weather(location)
+    else:
+        return f"Unknown action: {action_json['action']}"
+
+
+def generate_response(prompt, max_iterations=5):
+    conversation = prompt
+    
+    for i in range(max_iterations):
+        messages = [
+           {"role": "system", "content": SYSTEM_PROMPT},
+           {"role": "user", "content": conversation}
+        ]
+        
+        response = client.chat_completion(
+            messages=messages,
+            temperature=0.7,
+            top_p=0.9,
+            max_tokens=1024,
+            stream=False,
+            stop=["Observation:"] # Prevent the model from hallucinating a result, we want to use the (mocked) get_weather function to get the result
+        )
+        
+        model_response = response.choices[0].message.content
+        print(f"Model response (iteration {i+1}):")
+        print(model_response)
+        print("-" * 50, "\n\n")
+        
+        # Check if we have a final answer
+        if "Final Answer:" in model_response:
+            # Extract only the final answer part
+            final_answer_start = model_response.find("Final Answer:")
+            # final_answer = model_response[final_answer_start + len("Final Answer:"):].strip()
+            # Final answer should be everything after "Final Answer:" including Final Answer:
+            final_answer = model_response[final_answer_start:].strip()
+            return final_answer
+        
+        # Extract and execute action
+        action_json = extract_action_from_response(model_response)
+        if action_json:
+            observation = execute_action(action_json)
+            conversation += model_response + f"\nObservation: {observation}\n"
+            print(f"Observation: {observation}")
+            print("-" * 50, "\n\n")
+        else:
+            # If no action found, return the response as is
+            return model_response
+    
+    return "Maximum iterations reached without final answer."
+
+
+# Example usage
 if __name__ == "__main__":
-    prompt = f"What is the weather in {location}? \n"
+    prompt = f"What is the weather in {location}?"
     print("Prompt:", prompt)
     print("Generating response... \n\n")
     response = generate_response(prompt)
-    print("Response:", response)
+    # print("\nFinal Response:")
+    print(response)
