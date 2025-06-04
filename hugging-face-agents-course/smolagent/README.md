@@ -10,4 +10,10 @@ https://huggingface.co/spaces/agents-course/First_agent_template
 
 ```bash
 pip install -r requirements.txt
+# added import os to app.py
+pip install 'smolagents[gradio]
 ```
+
+## Running example
+
+https://huggingface.co/spaces/schafeld/First_agent_template
