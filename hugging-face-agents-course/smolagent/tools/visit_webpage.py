@@ -2,7 +2,8 @@ from typing import Any, Optional
 from smolagents.tools import Tool
 import requests
 import markdownify
-import smolagents
+import re
+# import smolagents
 
 class VisitWebpageTool(Tool):
     name = "visit_webpage"
@@ -12,10 +13,8 @@ class VisitWebpageTool(Tool):
 
     def forward(self, url: str) -> str:
         try:
-            import requests
-            from markdownify import markdownify
+            # use scoped imports
             from requests.exceptions import RequestException
-
             from smolagents.utils import truncate_content
         except ImportError as e:
             raise ImportError(
@@ -27,7 +26,7 @@ class VisitWebpageTool(Tool):
             response.raise_for_status()  # Raise an exception for bad status codes
 
             # Convert the HTML content to Markdown
-            markdown_content = markdownify(response.text).strip()
+            markdown_content = markdownify.markdownify(response.text).strip()
 
             # Remove multiple line breaks
             markdown_content = re.sub(r"\n{3,}", "\n\n", markdown_content)
