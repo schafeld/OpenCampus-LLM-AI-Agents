@@ -14,7 +14,7 @@ load_dotenv(os.path.expanduser("~/Projekte/MOOC/OpenCampus/codespace/.env"))
 ## You need a token from https://hf.co/settings/tokens, ensure that you select 'read' as the token type. If you run this on Google Colab, you can set it up in the "settings" tab under "secrets". Make sure to call it "HF_TOKEN"
 # os.environ["HF_TOKEN"]="hf_xxxxxxxxxxxxxx"
 if not os.environ.get("HF_TOKEN"):
-  # os.environ["HF_TOKEN"] = getpass.getpass("Enter API key for OpenAI: ")
+  # os.environ["HF_TOKEN"] = getpass.getpass("Enter API key for Hugging Face: ")
   raise EnvironmentError("HF_TOKEN not found in the .env file.")
 
 client = InferenceClient("meta-llama/Llama-3.3-70B-Instruct")
