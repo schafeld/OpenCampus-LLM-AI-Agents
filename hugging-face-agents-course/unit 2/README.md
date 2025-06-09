@@ -6,6 +6,14 @@
 
 ```bash
 # check if keys are set
-~/Projekte/MOOC/OpenCampus/codespace/.env
+cat ~/Projekte/MOOC/OpenCampus/codespace/.env
 
 ```
+
+Set Hugging Face Access token (with saved Git credentials):
+
+```bash
+huggingface-cli login --add-to-git-credential --token  <YOUR_HUGGINGFACE_TOKEN>
+```
+
+The token is saved to `~/.cache/huggingface/stored_tokens`.
